@@ -101,46 +101,12 @@ $(document).ready(function() {
         }
     });
     
-    $("#coll_delete").click(function() {
-        if (confirm("WARNING: Are you sure you want to delete this collection and all documents?") == true) {
-            $.ajax({
-                method: "POST",
-                url: "/" + $("#conn_name").val() + "/" + $("#db_name").val() + "/coll_delete",
-                data: {"collection_name" : $("#del_coll_name option:selected" ).text()}
-            })
-            .success(function(msg) {
-                show_notification(msg,"success", true);
-            })
-            .error(function(msg) {
-                show_notification(msg.responseText,"danger");
-            });
-        }
-    });
-    
     $("#db_create").click(function() {
         if($("#new_db_name").val() != ""){
             $.ajax({
                 method: "POST",
                 url: "/" + $("#conn_name").val() + "/db_create",
                 data: {"db_name" : $("#new_db_name").val()}
-            })
-            .success(function(msg) {
-                show_notification(msg,"success", true);
-            })
-            .error(function(msg) {
-                show_notification(msg.responseText,"danger");
-            });
-        }else{
-            show_notification("Please enter a database name","danger");
-        }
-    });
-    
-    $("#db_delete").click(function() {
-        if (confirm("WARNING: Are you sure you want to delete this collection and all documents?") == true) {
-            $.ajax({
-                method: "POST",
-                url: "/" + $("#conn_name").val() + "/db_delete",
-                data: {"db_name" : $("#del_db_name option:selected" ).text()}
             })
             .success(function(msg) {
                 show_notification(msg,"success", true);
@@ -223,25 +189,6 @@ $(document).ready(function() {
         }
     });
     
-    $("#user_delete").click(function() {
-        if(confirm("WARNING: Are you sure you want to delete this user?") == true) {
-            $.ajax({
-                method: "POST",
-                url: "/" + $("#conn_name").val() + "/" + $("#db_name").val() + "/na/user_delete",
-                data: {"username": $("#del_user_name option:selected" ).text()}
-            })
-            .success(function(msg) {
-                show_notification(msg,"success");
-                setInterval(function() {
-                    window.location = "/" + $("#conn_name").val() + "/" + $("#db_name").val();
-                }, 2000);
-            })
-            .error(function(msg) {
-                show_notification(msg.responseText,"danger");
-            });
-        }
-    });
-    
     $("#add_config").click(function() {
         if($("#new_conf_conn_name").val() != "" && $("#new_conf_conn_string").val() != ""){
             var data_obj = {};
@@ -301,6 +248,8 @@ $(document).ready(function() {
             }else{
                 $('#doc_none_found').addClass('hidden');
             }
+
+            localStorage.removeItem('searchQuery');
             
             var total_docs = Math.ceil(response.total_docs / page_len);
             
@@ -315,7 +264,6 @@ $(document).ready(function() {
             $('#coll_docs').empty();
             for (var i = 0; i < response.data.length; i++) {
                 var inner_html = '<div class="col-xs-12 col-md-8 col-lg-10 no-pad-left"><pre class="code-block doc_view"><code class="json">' + JSON.stringify(response.data[i]) + '</code></pre></div>';
-                inner_html += '<div class="col-xs-6 col-md-2 col-lg-1 text-left pad-bottom"><a href="#"  class="btn btn-danger btn-sm" onclick="deleteDoc(\''+response.data[i]._id+'\')" style="margin-right: 15px; margin-left: 15px;">Delete</a></div>';
                 inner_html += '<div class="col-xs-6 col-md-2 col-lg-1 text-right no-side-pad pad-bottom"><a href="/'+ conn_name + '/' + db_name + '/' + coll_name + '/edit/' + response.data[i]._id + '" class="btn btn-success btn-sm">Edit</a></div>';
                 $('#coll_docs').append(inner_html);
             };
@@ -342,22 +290,6 @@ $(document).ready(function() {
         });
     }
 });
-
-function deleteDoc(doc_id){
-    if(confirm("WARNING: Are you sure you want to delete this document?") == true) {
-        $.ajax({
-            method: "POST",
-            url: "/" + $("#conn_name").val() + "/" + $("#db_name").val() + "/" + $("#coll_name").val() + "/doc_delete",
-            data: {"doc_id": doc_id}
-        })
-        .success(function(msg) {
-            show_notification(msg,"success", true);
-        })
-        .error(function(msg) {
-            show_notification(msg.responseText,"danger");
-        });
-    }
-}
 
 function dropIndex(index_index){
     $.ajax({
