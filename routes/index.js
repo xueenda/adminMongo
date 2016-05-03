@@ -148,7 +148,7 @@ router.get('/:conn/:db/:coll/view/:page_num/:key_val?/:value_val?', function (re
     var connection_list = req.nconf.connections.get('connections');
     var mongodb = require('mongodb').MongoClient;
     var mongo_uri = require('mongo-uri');
-    var docs_per_page = req.nconf.app.get('app:docs_per_page') != undefined ? req.nconf.app.get('app:docs_per_page') : 5;
+    var docs_per_page = req.nconf.app.get('app:docs_per_page') != undefined ? req.nconf.app.get('app:docs_per_page') : 10;
 
     var conn_string = connection_list[req.params.conn].connection_string;
 
@@ -970,7 +970,7 @@ router.post('/api/:conn/:db/:coll/:page', function (req, res, next) {
     var connection_list = req.nconf.connections.get('connections');
     var mongodb = require('mongodb').MongoClient;
     var ejson = require('mongodb-extended-json');
-    var docs_per_page = req.nconf.app.get('app:docs_per_page') != undefined ? req.nconf.app.get('app:docs_per_page') : 5;
+    var docs_per_page = req.nconf.app.get('app:docs_per_page') != undefined ? req.nconf.app.get('app:docs_per_page') : 10;
    
     // Check for existance of connection
     if(connection_list[req.params.conn] == undefined){

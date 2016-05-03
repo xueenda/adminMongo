@@ -256,14 +256,20 @@ $(document).ready(function() {
             $('#pager').bootpag({
                 total: total_docs,
                 page: page_num,
-                maxVisible: 5,
+                maxVisible: 10,
                 href: pager_href
             });
             
             //clear the div first
             $('#coll_docs').empty();
             for (var i = 0; i < response.data.length; i++) {
-                var inner_html = '<div class="col-xs-12 col-md-8 col-lg-10 no-pad-left"><pre class="code-block doc_view"><code class="json">' + JSON.stringify(response.data[i]) + '</code></pre></div>';
+                var id = response.data[i]._id
+                var inner_html = '<div class="col-xs-12 col-md-8 col-lg-10 no-pad-left">' +
+                    '<a data-toggle="collapse" href="#'+id+'" aria-expanded="false" aria-controls="'+id+'">'+id+'</a>' +
+                    '<div class="collapse" id="'+id+'">' +
+                        '<pre class="code-block doc_view"><code class="json">' + JSON.stringify(response.data[i]) + '</code></pre>' +
+                    '</div></div>';
+                
                 inner_html += '<div class="col-xs-6 col-md-2 col-lg-1 text-right no-side-pad pad-bottom"><a href="/'+ conn_name + '/' + db_name + '/' + coll_name + '/edit/' + response.data[i]._id + '" class="btn btn-success btn-sm">Edit</a></div>';
                 $('#coll_docs').append(inner_html);
             };

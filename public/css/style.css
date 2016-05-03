@@ -78,9 +78,8 @@ body {
 }
 
 .doc_view{
-    max-height: 120px;
     min-height: 120px;
-    overflow: auto
+    overflow: auto;
 }
 
 .new_doc_button{
